@@ -7,12 +7,28 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+
+    private static LatLng PERTH = new LatLng(-31.880374, 115.857005);
+    private static LatLng BRISBANE = new LatLng(-27.426973, 153.020620);
+    private static LatLng SYDNEY = new LatLng(-33.847927,150.6517844);
+
+    private Marker mPerth;
+    private Marker mSydney;
+    private Marker mBrisbane;
+
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +54,37 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mPerth = mMap.addMarker(new MarkerOptions()
+                .position(PERTH)
+                .title("Perth"));
+        mPerth.setTag(0);
+
+
+        mSydney = mMap.addMarker(new MarkerOptions()
+                .position(SYDNEY)
+                .title("Sydney")
+        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        mSydney.setTag(0);
+
+        mBrisbane = mMap.addMarker(new MarkerOptions()
+                .position(BRISBANE)
+                .title("Brisbane")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        mBrisbane.setTag(0);
+
+
+
+        // Add a marker in Sydney and move the camera
+        //LatLng kilimanjaro = new LatLng(-3.067157, 37.355670);
+        //LatLng cairo = new LatLng(30.048934, 31.236319);
+       // mMap.addMarker(new MarkerOptions().position(kilimanjaro).title("Marker in Kilimanjaro")
+       // .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+       // mMap.moveCamera(CameraUpdateFactory.newLatLng(kilimanjaro));
+       // mMap.addMarker(new MarkerOptions().position(cairo).title("Marker in Cairo")
+       // .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cairo, 13));
+
     }
 }
