@@ -2,7 +2,10 @@ package com.example.david_android.mygrocerylist.themappproject;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -13,7 +16,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+import java.util.ArrayList;
+import java.util.List;
+
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
+        GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
 
@@ -54,25 +61,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        List<Marker>markerList = new ArrayList<>();
+
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
         mPerth = mMap.addMarker(new MarkerOptions()
                 .position(PERTH)
                 .title("Perth"));
         mPerth.setTag(0);
-
+        markerList.add(mPerth);
 
         mSydney = mMap.addMarker(new MarkerOptions()
                 .position(SYDNEY)
                 .title("Sydney")
         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
         mSydney.setTag(0);
+        markerList.add(mSydney);
 
         mBrisbane = mMap.addMarker(new MarkerOptions()
                 .position(BRISBANE)
                 .title("Brisbane")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
         mBrisbane.setTag(0);
+        markerList.add(mBrisbane);
+
+        mMap.setOnMarkerClickListener(this); //we are registering our click listener
+
+        for (Marker m : markerList){
+            LatLng latLng = new LatLng(m.getPosition().latitude, m.getPosition().longitude);
+            mMap.addMarker(new MarkerOptions().position(latLng));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 2));
+
+            //Log.d("marker", m.getTitle());
+
+
+
+        }
 
 
 
@@ -86,5 +111,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
        // .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cairo, 13));
 
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        Integer clickCount = (Integer) marker.getTag();
+        if(clickCount != null) {
+            clickCount = clickCount +1;
+
+            marker.setTag(clickCount);
+            Toast.makeText(this, marker.getTitle() +  " has been clicked " +
+            clickCount+ " times ", Toast.LENGTH_LONG).show();
+        }
+        return false;
     }
 }
