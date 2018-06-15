@@ -1,3 +1,3 @@
 # TheMappProject
 
-Android app using Google Map API for detecting earthquakes
+Training using google map for android and creating markers with different functionality 
